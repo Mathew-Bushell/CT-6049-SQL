@@ -30,24 +30,13 @@ public class books extends HttpServlet {
 
         // Hello
         PrintWriter out = response.getWriter();
-//        out.println("Book servlet, if you see me there is a problem");
-        FindIterable<Document> books = bookBean.bookBean();
-        MongoCursor<Document> bookCursor = books.iterator();
-        JSONArray JSON = new JSONArray();
-        try{
-            while (bookCursor.hasNext()){
-                Document bookDoc = bookCursor.next();
+        JSONArray JSON = bookBean.bookBean();
 
-                JSONObject docjson = new JSONObject(bookDoc);
-                JSON.put(docjson);
 
-            }
-        }finally{
-            bookCursor.close();
-        }
+
         request.setAttribute("books",JSON);
+        out.println(JSON);
         request.getRequestDispatcher("/books.jsp").forward(request, response);
-
 
     }
 

@@ -1,5 +1,6 @@
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -29,46 +30,25 @@ public class login extends HttpServlet {
     PrintWriter out = response.getWriter();
     out.println("you shouldnt be here"+"<br>");
     String SNum = request.getParameter("snum");
-    FindIterable<Document> result = loginBean.loginBean(SNum);
+    String PWord = request.getParameter("pword");
+    String result = loginBean.loginBean(SNum, PWord);
 
-    MongoCursor<Document> cursor = result.iterator();
-    out.println("help");
-    try {
-        while (cursor.hasNext()){
-            Document doc = cursor.next();
-            if (request.getParameter("pword").equals(doc.getString("Password"))) {
+    if (result.equals(SNum)){
+//                JSONArray JSON = new JSONArray();
+                JSONArray JSON = bookBean.bookBean();
 
-                //sets attribute for global remember
-                request.setAttribute("snum", SNum);
-                FindIterable<Document> books = bookBean.bookBean();
-                MongoCursor<Document> bookCursor = books.iterator();
-                JSONArray JSON = new JSONArray();
-                try{
-                    while (bookCursor.hasNext()){
-                        Document bookDoc = bookCursor.next();
 
-                        JSONObject docjson = new JSONObject(bookDoc);
-                        JSON.put(docjson);
-                    }
-                }finally{
-                   bookCursor.close();
-                }
+
                 request.setAttribute("books",JSON);
+                request.setAttribute("snum",SNum);
                 out.println(JSON);
-                cursor.close();
                 request.getRequestDispatcher("/books.jsp").forward(request, response);
-
+            out.println(result);
             } else {
-                cursor.close();
-                request.setAttribute("reply","Invalid username or password");
+
+                request.setAttribute("reply",result);
                 request.getRequestDispatcher("/login.jsp").forward(request, response);
             }
         }
-    } finally {
-        cursor.close();
-    }
+
 }
-
-
-
-    }

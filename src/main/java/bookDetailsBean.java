@@ -2,26 +2,48 @@ import com.mongodb.client.*;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import com.mongodb.client.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+
 import org.bson.Document;
+import org.json.JSONObject;
+
 import static com.mongodb.client.model.Filters.*;
 
 @Stateless(name = "DetailsEJB")
 public class bookDetailsBean {
     @EJB
-    MongoClientProviderBean mongoClientProviderBean;
+    OracleClientProviderBean oracleClientProvider;
 
 
-    public FindIterable<Document> bookDetailsBean(String ISBN){
-        MongoClient mongo = mongoClientProviderBean.getMongoClient();
-        MongoDatabase database = mongo.getDatabase("LibraryDB");
-        MongoCollection<Document> collection = database.getCollection("Books");
-        return collection.find(eq("ISBN",ISBN));
+    public JSONObject bookDetailsBean(String ISBN){
+
+        String Statement = "SELECT * FROM TBLBOOKS WHERE ISBN = '"+ISBN+"'";
+        Statement stmt = null;
+        try{
+            JSONObject bookJSON = new JSONObject();
+            Connection con = oracleClientProvider.getOracleClient();
+            stmt = con.createStatement();
+            ResultSet result = stmt.executeQuery(Statement);
+
+            while (result.next()){
+
+
+                int totalColumns = result.getMetaData().getColumnCount();
+                for (int i = 1; i <= totalColumns; i++){
+                    bookJSON.put(result.getMetaData().getColumnLabel(i), result.getObject(i));
+                }
+            }
+            stmt.close();
+            return(bookJSON);
+        }catch(SQLException e){
+            e.printStackTrace();
+//            return(e.toString());
+        }
+
+        return(null);
     }
 }

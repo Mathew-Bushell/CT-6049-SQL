@@ -71,12 +71,12 @@
                   for (int i = 0; i < Books.length(); i++) {
                       JSONObject Book = Books.getJSONObject(i);
                       if (Book != null) {
-                          String Title = Book.getString("Title");
-                          String Genre = Book.getString("Genre");
-                          String Abstract = Book.getString("Abstract");
-                          String Author = Book.getString("Author");
-                          String Publisher = Book.getString("Publisher");
-                          String Published = Book.getString("Published");
+                          String Title = Book.getString("TITLE");
+                          String Genre = Book.getString("GENRE");
+                          String Abstract = Book.getString("ABSTRACT");
+                          String Author = Book.getString("AUTHOR");
+                          String Publisher = Book.getString("PUBLISHER");
+                          String Published = Book.getString("PUBLISHED");
                           String ISBN = Book.getString("ISBN");
 
       %>

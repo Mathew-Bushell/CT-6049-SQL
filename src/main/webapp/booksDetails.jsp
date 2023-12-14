@@ -50,15 +50,15 @@
 
     if (book != null) {
         if (!book.isEmpty()){
-            String Title = book.getString("Title");
-            String Genre = book.getString("Genre");
-            String Abstract = book.getString("Abstract");
-            String Author = book.getString("Author");
-            String Publisher = book.getString("Publisher");
-            String Published = book.getString("Published");
+            String Title = book.getString("TITLE");
+            String Genre = book.getString("GENRE");
+            String Abstract = book.getString("ABSTRACT");
+            String Author = book.getString("AUTHOR");
+            String Publisher = book.getString("PUBLISHER");
+            String Published = book.getString("PUBLISHED");
             String ISBN = book.getString("ISBN");
-            Integer Qunatity = book.getInt("Quantity");
-            Integer Stock = (book.getInt("Quantity")-book.getInt("QOut"));
+            Integer Qunatity = book.getInt("QUANTITY");
+            Integer Stock = (book.getInt("QUANTITY")-book.getInt("QOUT"));
             String SNum = (String)request.getAttribute("SNum");
 
 %>

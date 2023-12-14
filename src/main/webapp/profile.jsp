@@ -115,11 +115,11 @@
                       JSONObject Loan = Loans.getJSONObject(i);
                       if (Loan != null) {
                           String Title = Titles.get(i);
-                          String LOut = Loan.getString("LOut");
-                          String LReturn = Loan.getString("LReturn");
-                          Integer Fine= Loan.getInt("Fine");
+                          String LOut = Loan.getString("LOUT");
+                          String LReturn = Loan.getString("LRETURN");
+                          Integer Fine= Loan.getInt("AFINE");
                           String ISBN = Loan.getString("ISBN");
-                          String Status = Loan.getString("Status");
+                          String Status = Loan.getString("STATUS");
 
 
 

@@ -7,7 +7,7 @@ import org.bson.Document;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-
+import java.sql.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,12 +31,11 @@ public class Registration extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.println("Processing user registration ........");
 
-        Document customer = new Document()
-                .append("FName", request.getParameter("fname"))
-                .append("LName", request.getParameter("lname"));
+        String customer = "INSERT INTO tblStudents" +
+                "(Student_ID,FName,SName,SNum,Password)" +
+                "VALUES ("+request.getParameter("FName")+")";
 
-
-        registrationBean.createCustomer(customer);
+//        registrationBean.createCustomer(customer);
 
     }
 

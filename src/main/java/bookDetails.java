@@ -27,21 +27,14 @@ public class bookDetails extends HttpServlet{
         out.println("you shouldnt be here"+"<br>");
         String ISBN = request.getParameter("ISBN");
         String SNum = request.getParameter("SNum");
-        FindIterable<Document> result = bookDetailsBean.bookDetailsBean(ISBN);
-        MongoCursor<Document> cursor = result.iterator();
+//        out.println(ISBN +"<br>"+ SNum+"<br>");
+        JSONObject  result = bookDetailsBean.bookDetailsBean(ISBN);
+//        out.println("SELECT * FROM TBLBOOKS WHERE ISBN = "+ISBN);
+//        out.println(result);
+        request.setAttribute("book", result);
+        request.setAttribute("SNum", SNum);
+        request.getRequestDispatcher("/booksDetails.jsp").forward(request,response);
 
-        try{
-            while (cursor.hasNext()) {
-                Document doc = cursor.next();
-                JSONObject JSONBook = new JSONObject(doc);
-                request.setAttribute("book", JSONBook);
-                request.setAttribute("SNum", SNum);
-                request.getRequestDispatcher("/booksDetails.jsp").forward(request,response);
-
-            }
-        }finally{
-            cursor.close();
-        }
 
 
 

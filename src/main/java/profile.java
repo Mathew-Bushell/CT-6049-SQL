@@ -18,7 +18,7 @@ public class profile extends HttpServlet{
     @EJB
     profileBean profileBean;
     @EJB
-    loginBean loginBean;
+    userFetchBean userFetchBean;
     @EJB
     bookBean bookBean;
 
@@ -34,59 +34,57 @@ public class profile extends HttpServlet{
         PrintWriter out = response.getWriter();
         out.println("you shouldnt be here"+"<br>");
         String SNum = request.getParameter("SNum");
-        FindIterable<Document> loanResult = profileBean.profileBean(SNum,"SNum");
-        FindIterable<Document> bookResult = bookBean.bookBean();
-        FindIterable<Document> userResult = loginBean.loginBean(SNum);
-        MongoCursor<Document> userCursor = userResult.iterator();
-
-        try{
-            while(userCursor.hasNext()){
-                Document userDoc = userCursor.next();
-
-                request.setAttribute("SNum",userDoc.getString("SNum"));
-                request.setAttribute("FName",userDoc.getString("FName"));
-                request.setAttribute("LName",userDoc.getString("LName"));
-                request.setAttribute("Password",userDoc.getString("Password"));
-
-            }
-        }finally{userCursor.close();}
-        MongoCursor<Document> loanCursor = loanResult.iterator();
-        JSONArray loanJSON = new JSONArray();
-
-        ArrayList<String> bookTitles = new ArrayList<String>();
-        try{
-            while (loanCursor.hasNext()){
-                Document loanDoc = loanCursor.next();
-
-                JSONObject docjson = new JSONObject(loanDoc);
-                loanJSON.put(docjson);
-                out.println(docjson+"<br>");
-                String LoanISBN = docjson.getString("ISBN");
-                MongoCursor<Document> bookCursor = bookResult.cursor();
-                try{
-                    while(bookCursor.hasNext()) {
-                        Document bookDoc = bookCursor.next();
-
-                        if (bookDoc.getString("ISBN").equals(LoanISBN)){
-                            bookTitles.add(bookDoc.getString("Title"));
-                        }
-                    }
-                }finally {
-                    bookCursor.close();
-                }
-
-
-            }
-        }finally{
-            loanCursor.close();
-        }
-        request.setAttribute("loans",loanJSON);
-        request.setAttribute("titles",bookTitles);
-        out.println(loanJSON+"<br>");
-        out.println(SNum+"<br>");
+        out.println(SNum);
+        JSONArray loanResult = profileBean.profileBean(SNum,"SNUM");
+        out.println(loanResult);
+        request.setAttribute("loans",loanResult);
+//        FindIterable<Document> bookResult = bookBean.bookBean();
+        JSONObject userResult = userFetchBean.userFetchBean(SNum);
 
 
 
-        request.getRequestDispatcher("/profile.jsp").forward(request, response);
+        request.setAttribute("SNum",userResult.getString("SNUM"));
+        request.setAttribute("FName",userResult.getString("FNAME"));
+        request.setAttribute("LName",userResult.getString("LNAME"));
+        request.setAttribute("Password",userResult.getString("PWORD"));
+
+//        MongoCursor<Document> loanCursor = loanResult.iterator();
+//        JSONArray loanJSON = new JSONArray();
+//
+//        ArrayList<String> bookTitles = new ArrayList<String>();
+//        try{
+//            while (loanCursor.hasNext()){
+//                Document loanDoc = loanCursor.next();
+//
+//                JSONObject docjson = new JSONObject(loanDoc);
+//                loanJSON.put(docjson);
+//                out.println(docjson+"<br>");
+//                String LoanISBN = docjson.getString("ISBN");
+//                MongoCursor<Document> bookCursor = bookResult.cursor();
+//                try{
+//                    while(bookCursor.hasNext()) {
+//                        Document bookDoc = bookCursor.next();
+//
+//                        if (bookDoc.getString("ISBN").equals(LoanISBN)){
+//                            bookTitles.add(bookDoc.getString("Title"));
+//                        }
+//                    }
+//                }finally {
+//                    bookCursor.close();
+//                }
+//
+//
+//            }
+//        }finally{
+//            loanCursor.close();
+//        }
+//        request.setAttribute("loans",loanJSON);
+//        request.setAttribute("titles",bookTitles);
+//        out.println(loanJSON+"<br>");
+//        out.println(SNum+"<br>");
+//
+//
+//
+//        request.getRequestDispatcher("/profile.jsp").forward(request, response);
     }
 }

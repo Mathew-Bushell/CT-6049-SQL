@@ -1,24 +1,29 @@
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
+import jakarta.el.StandardELContext;
 import org.bson.Document;
 
 @Stateless(name = "rentUpdateEJB")
 public class rentUpdateBean {
     @EJB
-    MongoClientProviderBean mongoClientProviderBean;
+    OracleClientProviderBean oracleClientProvider;
 
-    public void rentUpdateBean(Document bookUpdate, Document bookFilter, Document loanCreate){
-        MongoClient mongo = mongoClientProviderBean.getMongoClient();
-        MongoDatabase database = mongo.getDatabase("LibraryDB");
-        MongoCollection<Document> bookCollection = database.getCollection("Books");
-        bookCollection.updateOne(bookFilter, bookUpdate);
+    public void rentUpdateBean(String Statementone, String Statementtwo){
+        Statement stmt = null;
+        try {
+            Connection con = oracleClientProvider.getOracleClient();
+            stmt = con.createStatement();
 
-        MongoCollection<Document> userCollection = database.getCollection("Loans");
-        userCollection.insertOne(loanCreate);
+            stmt.executeUpdate(Statementone);
 
-        mongo.close();
+            stmt.executeUpdate(Statementtwo);
+            stmt.close();
+        }catch (SQLException e){
+
+        }
+
     }
 }

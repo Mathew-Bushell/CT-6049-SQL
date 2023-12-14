@@ -1,21 +1,32 @@
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import org.bson.Document;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 @Stateless(name = "RegistrationEJB")
 public class RegistrationBean {
     @EJB
-    MongoClientProviderBean mongoClientProviderBean;
+    OracleClientProviderBean oracleClientProvider;
 
-    public void createCustomer(Document customer) {
-        MongoClient mongo = mongoClientProviderBean.getMongoClient();
-        MongoDatabase database = mongo.getDatabase("LibraryDB");
-        MongoCollection collection = database.getCollection("Students");
-        collection.insertOne(customer);
-        mongo.close();
+    public void createCustomer(String customer) {
+        Statement stmt = null;
+        try {
+            Connection con = oracleClientProvider.getOracleClient();
+            stmt = con.createStatement();
+
+
+            //execute the sql insert statement
+            stmt.executeUpdate(customer);
+            stmt.close();
+
+        } catch (SQLException e) {
+//            System.out.println("Failure");
+            e.printStackTrace();
+
+        }
     }
 }
 

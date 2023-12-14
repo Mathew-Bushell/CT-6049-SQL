@@ -13,14 +13,14 @@ import static com.mongodb.client.model.Filters.*;
 @Stateless(name = "loanFetchEJB")
 public class loanFetchBean {
     @EJB
-    MongoClientProviderBean mongoClientProviderBean;
+    OracleClientProviderBean oracleClientProviderBean;
 
     public FindIterable<Document> loanFetchBean(String targetOne, String filterOne, String targetTwo, String filterTwo){
-        MongoClient mongo = mongoClientProviderBean.getMongoClient();
-        MongoDatabase database = mongo.getDatabase("LibraryDB");
-        MongoCollection<Document> collection = database.getCollection("Loans");
-        return collection.find(and(eq(filterOne,targetOne),eq(filterTwo, targetTwo)));
-
+//        MongoClient mongo = oracleClientProviderBean.getMongoClient();
+//        MongoDatabase database = mongo.getDatabase("LibraryDB");
+//        MongoCollection<Document> collection = database.getCollection("Loans");
+//        return collection.find(and(eq(filterOne,targetOne),eq(filterTwo, targetTwo)));
+        return(null);
 
     }
 

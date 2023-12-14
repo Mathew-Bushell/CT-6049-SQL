@@ -19,7 +19,8 @@ import java.io.PrintWriter;
 public class register extends HttpServlet {
 
     @EJB
-    RegistrationBean registrationBean;
+    RegistrationBean RegistrationBean;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -32,14 +33,18 @@ public class register extends HttpServlet {
     // Hello
     PrintWriter out = response.getWriter();
     out.println("Processing user registration ........");
-    Document customer = new Document()
-            .append("FName", request.getParameter("fname"))
-            .append("LName", request.getParameter("lname"))
-            .append("SNum", request.getParameter("snum"))
-            .append("Password", request.getParameter("pword"))
-            .append("OFine", (0))
-            .append("PFine", (0));
-    registrationBean.createCustomer(customer);
+
+        String customer = "INSERT INTO \"TBLSTUDENTS\"" +
+                "(\"FNAME\",\"LNAME\",\"SNUM\",\"PWORD\")" +
+                "VALUES (" +
+                "'"+request.getParameter("fname")+"',"+
+                "'"+request.getParameter("lname")+"',"+
+                "'"+request.getParameter("snum")+"',"+
+                "'"+request.getParameter("pword")+"')";
+//        out.println(customer);
+
+        RegistrationBean.createCustomer(customer);
+//    out.println(thing);
 }
 //public void createCustomer(Document student) {
 //    MongoClient mongo = MongoClients.create();
