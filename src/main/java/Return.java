@@ -39,44 +39,9 @@ public class Return extends HttpServlet {
         String SNum = request.getParameter("SNum");
         String LOut = request.getParameter("LOut");
 
-        FindIterable<Document> bookResult = fetchBookBean.fetchBookBean(ISBN);
-        MongoCursor<Document> bookCursor = bookResult.iterator();
-        Integer NewQOut = 0;
-        ObjectId bookID = new ObjectId();
-        try{
-            while(bookCursor.hasNext()){
-                Document bookDoc = bookCursor.next();
+        returnBean.returnBean(ISBN, SNum, LOut);
 
-                bookID = bookDoc.getObjectId("_id");
-                Integer QOut = bookDoc.getInteger("QOut");
-                NewQOut = (QOut - 1);
-            }
-        }finally {
-            bookCursor.close();
-        }
-
-        FindIterable<Document> loanResult = loanFetchBean.loanFetchBean(ISBN, "ISBN", LOut, "LOut");
-        MongoCursor<Document> loanCursor = loanResult.iterator();
-
-        ObjectId loanID = new ObjectId();
-        try{
-            while(loanCursor.hasNext()){
-                Document loanDoc = loanCursor.next();
-
-                loanID = loanDoc.getObjectId("_id");
-
-            }
-        }finally {
-            loanCursor.close();
-        }
-
-        Document bookUpdate = new Document("$set", new Document("QOut",NewQOut));
-        Document bookFilter = new Document("_id", bookID);
-
-        Document loanUpdate = new Document("$set", new Document("Status", "Returned"));
-        Document loanFilter = new Document("_id", loanID);
-        out.println(bookID+"<br>"+loanID);
-        returnBean.returnBean(loanUpdate, loanFilter, bookUpdate, bookFilter);
-
+        request.setAttribute("SNum",SNum);
+        request.getRequestDispatcher("/profile").forward(request, response);
     }
 }

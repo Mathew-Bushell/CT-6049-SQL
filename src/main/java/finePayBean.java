@@ -7,19 +7,26 @@ import com.mongodb.client.MongoDatabase;
 
 import org.bson.Document;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 @Stateless(name = "finePayEJB")
 public class finePayBean {
     @EJB
-    OracleClientProviderBean oracleClientProviderBean;
+    OracleClientProviderBean oracleClientProvider;
 
-    public void finePayBean(Document loanUpdate, Document loanFilter){
-//        MongoClient mongo = oracleClientProviderBean.getMongoClient();
-//        MongoDatabase database = mongo.getDatabase("LibraryDB");
-//        MongoCollection<Document> loanCollection = database.getCollection("Loans");
-//        loanCollection.updateOne(loanFilter,loanUpdate);
-//
-//
-//        mongo.close();
+    public void finePayBean(String ISBN, String LOut, String SNum){
+        String Statement = "UPDATE TBLLOANS SET STATUS = 'Paid' WHERE SNUM = '"+SNum+"' AND ISBN = '"+ISBN+"' AND LOUT = '"+LOut+"'";
+        java.sql.Statement stmt = null;
+        try{
+            Connection con = oracleClientProvider.getOracleClient();
+            stmt = con.createStatement();
+            stmt.executeUpdate(Statement);
 
+            stmt.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -43,13 +43,15 @@
     <title>Books</title>
 </head>
 <body>
-<%--Hi this is books page--%>
-<% String SNum = request.getAttribute("SNum").toString(); %>
+<%--Hi this is Profile page--%>
+<%
+    String SNum = (String)request.getAttribute("SNum");
+%>
 <nav>
-<ul style="list-style-type: none; margin: 0; padding: 0;">
-    <li><form action="books" method="post"><input type="submit" value="Home"></form></li>
-    <li><form><input type="submit" value="Profile"></form></li>
-</ul>
+    <ul style="list-style-type: none; margin: 0; padding: 0;">
+        <li><form action="books" method="post"><input style="visibility: hidden; width:1px;" type="text" name="SNum" value="<%=SNum%>"><input type="submit" value="Home"></form></li>
+        <li><form action="profile" method="post"><input style="visibility: hidden; width:1px;" type="text" name="SNum" value="<%=SNum%>"><input type="submit" value="Profile"></form></li>
+    </ul>
 
 </nav>
 <br>
@@ -107,14 +109,14 @@
       <%
 
           JSONArray Loans = (JSONArray)request.getAttribute("loans");
-          ArrayList<String> Titles = (ArrayList<String>)request.getAttribute("titles");
+
 
           if (Loans != null){
               if (!Loans.isEmpty()){
                   for (int i = 0; i < Loans.length(); i++) {
                       JSONObject Loan = Loans.getJSONObject(i);
                       if (Loan != null) {
-                          String Title = Titles.get(i);
+                          String Title = Loan.getString("TITLE");
                           String LOut = Loan.getString("LOUT");
                           String LReturn = Loan.getString("LRETURN");
                           Integer Fine= Loan.getInt("AFINE");
@@ -133,9 +135,10 @@
             <td><%=Fine%></td>
             <%
                 if (Status.equals("Rented") || Status.equals("Paid")){
-          %><td><form action="Return" method="post"><input type="submit" value="Return"><input style="visibility: hidden; width:1px;" type="text" name="SNum" value="<%=SNum%>"><input style="visibility: hidden; width:1px;" type="text" name="ISBN" value="<%=ISBN%>"><input style="visibility: hidden; width:1px;" type="text" name="LOut" value="<%=LOut%>"></form></td>
+//                    style="visibility: hidden; width:1px;"
+          %><td><form action="Return" method="post"><input  type="submit" value="Return"><input style="visibility: hidden; width:1px;" type="text" name="SNum" value="<%=SNum%>"><input style="visibility: hidden; width:1px;" type="text" name="ISBN" value="<%=ISBN%>"><input style="visibility: hidden; width:1px;" type="text" name="LOut" value="<%=LOut%>"></form></td>
             <%}else if((Status.equals("Overdue"))){
-            %><td><form action="payFine" method="post"><input type="submit" value="Pay and Return"><input style="visibility: hidden; width:1px;" type="text" name="SNum" value="<%=SNum%>"><input style="visibility: hidden; width:1px;" type="text" name="ISBN" value="<%=ISBN%>"><input style="visibility: hidden; width:1px;" type="text" name="LOut" value="<%=LOut%>"></form></td>
+            %><td><form action="payFine" method="post"><input type="submit" value="Pay"><input style="visibility: hidden; width:1px;" type="text" name="SNum" value="<%=SNum%>"><input style="visibility: hidden; width:1px;" type="text" name="ISBN" value="<%=ISBN%>"><input style="visibility: hidden; width:1px;" type="text" name="LOut" value="<%=LOut%>"></form></td>
             <% }else{ %>
             <td>Returned</td>
             <% } %>

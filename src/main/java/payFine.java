@@ -35,24 +35,13 @@ public class payFine extends HttpServlet {
         out.println("you shouldnt be here"+"<br>");
         String ISBN = request.getParameter("ISBN");
         String LOut = request.getParameter("LOut");
-        out.println(ISBN+LOut);
-        FindIterable<Document> loanResult = loanFetchBean.loanFetchBean(ISBN, "ISBN", LOut, "LOut");
-        MongoCursor<Document> loanCursor = loanResult.iterator();
+        String SNum = request.getParameter("SNum");
+        out.println(ISBN+LOut+SNum);
 
-        ObjectId loanID = new ObjectId();
-        try{
-            while(loanCursor.hasNext()){
-                Document loanDoc = loanCursor.next();
 
-                loanID = loanDoc.getObjectId("_id");
+        finePayBean.finePayBean(ISBN, LOut,SNum);
 
-            }
-        }finally {
-            loanCursor.close();
-        }
-        out.println(loanID);
-        Document loanUpdate = new Document("$set", new Document("Status", "Paid"));
-        Document loanFilter = new Document("_id", loanID);
-        finePayBean.finePayBean(loanUpdate, loanFilter);
+        request.setAttribute("SNum",SNum);
+        request.getRequestDispatcher("/profile").forward(request, response);
     }
 }

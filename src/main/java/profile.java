@@ -38,7 +38,7 @@ public class profile extends HttpServlet{
         JSONArray loanResult = profileBean.profileBean(SNum,"SNUM");
         out.println(loanResult);
         request.setAttribute("loans",loanResult);
-//        FindIterable<Document> bookResult = bookBean.bookBean();
+
         JSONObject userResult = userFetchBean.userFetchBean(SNum);
 
 
@@ -48,43 +48,8 @@ public class profile extends HttpServlet{
         request.setAttribute("LName",userResult.getString("LNAME"));
         request.setAttribute("Password",userResult.getString("PWORD"));
 
-//        MongoCursor<Document> loanCursor = loanResult.iterator();
-//        JSONArray loanJSON = new JSONArray();
-//
-//        ArrayList<String> bookTitles = new ArrayList<String>();
-//        try{
-//            while (loanCursor.hasNext()){
-//                Document loanDoc = loanCursor.next();
-//
-//                JSONObject docjson = new JSONObject(loanDoc);
-//                loanJSON.put(docjson);
-//                out.println(docjson+"<br>");
-//                String LoanISBN = docjson.getString("ISBN");
-//                MongoCursor<Document> bookCursor = bookResult.cursor();
-//                try{
-//                    while(bookCursor.hasNext()) {
-//                        Document bookDoc = bookCursor.next();
-//
-//                        if (bookDoc.getString("ISBN").equals(LoanISBN)){
-//                            bookTitles.add(bookDoc.getString("Title"));
-//                        }
-//                    }
-//                }finally {
-//                    bookCursor.close();
-//                }
-//
-//
-//            }
-//        }finally{
-//            loanCursor.close();
-//        }
-//        request.setAttribute("loans",loanJSON);
-//        request.setAttribute("titles",bookTitles);
-//        out.println(loanJSON+"<br>");
-//        out.println(SNum+"<br>");
-//
-//
-//
-//        request.getRequestDispatcher("/profile.jsp").forward(request, response);
+
+
+        request.getRequestDispatcher("/profile.jsp").forward(request, response);
     }
 }
