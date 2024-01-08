@@ -14,7 +14,6 @@ public class OracleClientProviderBean {
     public Connection getOracleClient(){
         return oracleClient;
     }
-
     @PostConstruct
     public void init() {
         try {

@@ -1,7 +1,5 @@
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import org.bson.Document;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,16 +14,12 @@ public class RegistrationBean {
         try {
             Connection con = oracleClientProvider.getOracleClient();
             stmt = con.createStatement();
-
-
-            //execute the sql insert statement
+            //execute the sql insert user statement
             stmt.executeUpdate(customer);
             stmt.close();
-
         } catch (SQLException e) {
 //            System.out.println("Failure");
             e.printStackTrace();
-
         }
     }
 }

@@ -1,32 +1,24 @@
-import com.mongodb.client.*;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
-import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-
-import static com.mongodb.client.model.Filters.*;
-
-
 @Stateless(name = "ProfileEJB")
 public class profileBean {
     @EJB
     OracleClientProviderBean oracleClientProvider;
-
     public JSONArray profileBean(String target, String filter){
-        String Statement = "SELECT TBLLOANS.*, TBLBOOKS.TITLE FROM TBLLOANS JOIN TBLBOOKS ON TBLLOANS.ISBN=TBLBOOKS.ISBN WHERE " + filter+" = '"+target+"'";
+        //fetches a users loans and the titles of the loaned books
+        String Statement = "SELECT TBLLOANS.*, TBLBOOKS.TITLE FROM TBLLOANS JOIN" +
+                " TBLBOOKS ON TBLLOANS.ISBN=TBLBOOKS.ISBN WHERE " + filter+" = '"+target+"'";
         java.sql.Statement stmt = null;
         try {
             Connection con = oracleClientProvider.getOracleClient();
             stmt = con.createStatement();
             ResultSet result = stmt.executeQuery(Statement);
+            //converts the results into a JSON
             JSONArray JSON = new JSONArray();
             while (result.next()){
                 int totalColumns = result.getMetaData().getColumnCount();
@@ -45,6 +37,4 @@ public class profileBean {
         }
         return (null);
     }
-
-
 }

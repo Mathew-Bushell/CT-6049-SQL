@@ -1,14 +1,8 @@
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import org.bson.Document;
-
-
-
 @Stateless(name = "returnEJB")
 public class returnBean {
     @EJB
@@ -18,7 +12,6 @@ public class returnBean {
 //Updates the relevant loan item to be returned and book item to change the out value
     String StatementOne = "UPDATE TBLLOANS SET STATUS = 'Returned' WHERE SNUM = '"+SNum+"' AND ISBN = '"+ISBN+"' AND LOUT = '"+LOut+"'";
     String StatementTwo = "UPDATE TBLBOOKS SET QOUT = (QOUT - 1)WHERE ISBN = '"+ISBN+"'";
-
         Statement stmt = null;
         try{
             Connection con = oracleClientProvider.getOracleClient();

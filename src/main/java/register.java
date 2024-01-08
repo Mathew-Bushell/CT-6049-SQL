@@ -1,39 +1,27 @@
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.bson.Document;
-
 import jakarta.ejb.EJB;
-import org.bson.Document;
-
 import java.io.IOException;
 import java.io.PrintWriter;
-
 @WebServlet(name = "register", value = "/register")
 public class register extends HttpServlet {
-
     @EJB
     RegistrationBean RegistrationBean;
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-    // Hello
+    // Code responsible for adding a new customer to the database
     PrintWriter out = response.getWriter();
     out.println("Processing user registration ........");
-
+        //declares the sql responsible for inserting the new user
         String customer = "INSERT INTO \"TBLSTUDENTS\"" +
                 "(\"FNAME\",\"LNAME\",\"SNUM\",\"PWORD\")" +
                 "VALUES (" +
@@ -41,16 +29,8 @@ public class register extends HttpServlet {
                 "'"+request.getParameter("lname")+"',"+
                 "'"+request.getParameter("snum")+"',"+
                 "'"+request.getParameter("pword")+"')";
-//        out.println(customer);
-
         RegistrationBean.createCustomer(customer);
-//    out.println(thing);
+
 }
-//public void createCustomer(Document student) {
-//    MongoClient mongo = MongoClients.create();
-//    MongoDatabase database = mongo.getDatabase("LibraryDB");
-//    MongoCollection collection = database.getCollection("Students");
-//    collection.insertOne(student);
-//}
-//
+
     }

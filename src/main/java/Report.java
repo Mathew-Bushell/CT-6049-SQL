@@ -1,29 +1,19 @@
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.bson.Document;
 import org.json.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 @WebServlet(name = "Report", value = "/Report")
 public class Report extends HttpServlet {
     @EJB
     profileBean profileBean;
-
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
@@ -33,11 +23,15 @@ public class Report extends HttpServlet {
         String Month = request.getParameter("Month");
 
         JSONArray loanResult = profileBean.profileBean(SNum, "SNum");
+        //declares all important values used in the report
         Integer TFine = 0;
         Integer TPFine = 0;
         Integer TBRented = 0;
         Integer TBReturned = 0;
         Integer TBOverdue = 0;
+//        Loops through each of the users loans identifying what month they were
+//        taken out and if within the month checking the status
+//        depending on the status each value is updated accordingly
         if (loanResult != null) {
             if (!loanResult.isEmpty()) {
                 for (int i = 0; i < loanResult.length(); i++) {
@@ -67,13 +61,10 @@ public class Report extends HttpServlet {
                     }
                 }
             }
-
-
+            //outputs the results of the report
             out.println("<h3>Your report for month " + Month + "</h3><br>" +
                     "You rented " + TBRented + " books, returned " + TBReturned + " books and have " + TBOverdue + " books overdue. <br>" +
                     "You accrued a total fine of £" + TFine + " and have paid £" + TPFine + " of it leaving £" + (TFine - TPFine) + " left to be paid.");
-
-
         }
     }
 }
